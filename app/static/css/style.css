@@ -1,0 +1,111 @@
+body {
+    background: linear-gradient(to right, #eef2ff, #f8fafc);
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.container-fluid {
+    max-width: 1500px;
+}
+
+.analytics-card {
+    border-radius: 20px;
+    padding: 30px;
+    color: white;
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+.analytics-card:hover {
+    transform: translateY(-5px);
+}
+
+.analytics-card h5 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.analytics-card h1 {
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.total-card {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.completed-card {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.pending-card {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.progress-card {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+.card {
+    border-radius: 24px;
+}
+
+.table th {
+    padding: 18px;
+    font-size: 16px;
+}
+
+.table td {
+    padding: 18px;
+    font-size: 15px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 14px;
+}
+
+.btn {
+    border-radius: 14px;
+}
+
+.badge {
+    font-size: 14px;
+}
+.toast-notification {
+
+    position: fixed;
+
+    top: 30px;
+
+    right: 30px;
+
+    background: #111827;
+
+    color: white;
+
+    padding: 18px 28px;
+
+    border-radius: 14px;
+
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.25);
+
+    opacity: 0;
+
+    transform: translateY(-20px);
+
+    transition: all 0.4s ease;
+
+    z-index: 9999;
+
+    font-size: 16px;
+
+    font-weight: 600;
+}
+
+.toast-notification.show {
+
+    opacity: 1;
+
+    transform: translateY(0);
+}

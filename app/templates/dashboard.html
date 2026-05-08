@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid px-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-5 mt-3">
+
+        <div>
+
+            <h1 class="fw-bold display-5 text-primary">
+                Smart Task Dashboard
+            </h1>
+
+            <p class="text-muted fs-5">
+                Manage your daily tasks efficiently
+            </p>
+
+        </div>
+
+        <a href="/logout"
+           class="btn btn-danger btn-lg shadow">
+
+            Logout
+
+        </a>
+
+    </div>
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="analytics-card total-card">
+
+                <h5>Total Tasks</h5>
+
+                <h1>{{ analytics.total_tasks }}</h1>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="analytics-card completed-card">
+
+                <h5>Completed</h5>
+
+                <h1>{{ analytics.completed_tasks }}</h1>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="analytics-card pending-card">
+
+                <h5>Pending</h5>
+
+                <h1>{{ analytics.pending_tasks }}</h1>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="analytics-card progress-card">
+
+                <h5>Completion %</h5>
+
+                <h1>{{ analytics.completion_percentage }}%</h1>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-lg border-0 p-4 rounded-4">
+
+                <h3 class="fw-bold mb-4 text-primary">
+                    Add New Task
+                </h3>
+
+                <form id="taskForm">
+
+                    <input type="text"
+                           id="title"
+                           class="form-control form-control-lg mb-3"
+                           placeholder="Task Title"
+                           required>
+
+                    <textarea id="description"
+                              class="form-control form-control-lg mb-3"
+                              rows="4"
+                              placeholder="Task Description"
+                              required></textarea>
+
+                    <select id="priority"
+                            class="form-select form-select-lg mb-3">
+
+                        <option>High</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+
+                    </select>
+
+                    <select id="status"
+                            class="form-select form-select-lg mb-4">
+
+                        <option>Pending</option>
+                        <option>Completed</option>
+
+                    </select>
+
+                    <button type="submit"
+                            class="btn btn-primary btn-lg w-100 shadow">
+
+                        Add Task
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg border-0 p-4 rounded-4">
+
+                <h3 class="fw-bold text-primary mb-4">
+                    Task List
+                </h3>
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle table-hover">
+
+                        <thead class="table-dark">
+
+                            <tr>
+
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for task in tasks %}
+
+                            <tr>
+
+                                <td class="fw-semibold">
+                                    {{ task.title }}
+                                </td>
+
+                                <td>
+                                    {{ task.description }}
+                                </td>
+
+                                <td>
+
+                                    {% if task.priority == 'High' %}
+
+                                        <span class="badge bg-danger p-2">
+                                            High
+                                        </span>
+
+                                    {% elif task.priority == 'Medium' %}
+
+                                        <span class="badge bg-warning text-dark p-2">
+                                            Medium
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-success p-2">
+                                            Low
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {% if task.status == 'Completed' %}
+
+                                        <span class="badge bg-success p-2">
+                                            Completed
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary p-2">
+                                            Pending
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {% if task.status != 'Completed' %}
+
+                                    <button
+                                        class="btn btn-success btn-sm me-2 shadow"
+                                        onclick="completeTask({{ task.id }})">
+
+                                        Complete
+
+                                    </button>
+
+                                    {% endif %}
+
+                                    <button
+                                        class="btn btn-danger btn-sm shadow"
+                                        onclick="deleteTask({{ task.id }})">
+
+                                        Delete
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const form = document.getElementById('taskForm');
+
+form.addEventListener('submit', async (e) => {
+
+    e.preventDefault();
+
+    const task = {
+
+        title:
+        document.getElementById('title').value,
+
+        description:
+        document.getElementById('description').value,
+
+        priority:
+        document.getElementById('priority').value,
+
+        status:
+        document.getElementById('status').value
+    }
+
+    await fetch('/tasks', {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify(task)
+    });
+
+    location.reload();
+});
+
+
+async function deleteTask(id) {
+
+    await fetch(`/tasks/${id}`, {
+
+        method: 'DELETE'
+    });
+
+    location.reload();
+}
+
+
+async function completeTask(id) {
+
+    await fetch(`/tasks/${id}`, {
+
+        method: 'PUT',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+            status: 'Completed'
+        })
+    });
+
+    location.reload();
+}
+
+</script>
+
+{% endblock %}
